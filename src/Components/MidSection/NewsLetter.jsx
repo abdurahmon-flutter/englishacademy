@@ -5,11 +5,40 @@ import { Button } from "@material-tailwind/react";
 const NewsLetter = () => {
   const [email, setEmail] = useState("");
 
-  const handleEmail = (e) => {
+  const handleEmail = async (e) => {
     e.preventDefault();
-    setEmail("");
-    console.log("email", email);
+  
+    const requestData = {
+      id: 1,
+      name: "1",
+      phoneNumber: email,  // Use the email state value
+      description: "1",
+      requestProvider: 1,
+      lcenterId: 1,
+      branchId: 1,
+    };
+  
+    try {
+      const response = await fetch("https://keshvista1.pythonanywhere.com/request-to-study/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
+  
+      if (response.ok) {
+        alert("Yuborildi");
+        setEmail(""); // Clear the input field after successful submission
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to send email:", errorData);
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
+    }
   };
+  
 
   return (
     <div className="flex items-center justify-center content-center justify-items-center relative">
